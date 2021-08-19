@@ -23,6 +23,7 @@ function gen(app)
         <p>Click inside a circle to draw the next line<br>
         Press 9 to undo<br>
         Refresh to clear drawing</p>
+        <button id="undo">Undo Drawing Last Line</button>
         <div>` + `<canvas id="screen" name="${req.body.uname}" width="550" height="550"
         style="border:1px solid #c3c3c3;">
         </canvas>` + `<div id='uname' hidden> ${req.body.uname} </div>`;

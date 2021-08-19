@@ -19,6 +19,7 @@ async function main()
     canvas.addEventListener("click", (event) => f.onClickField(event) );
     canvas.addEventListener("mousemove",(event) => f.onMouseMove(event) );
     document.addEventListener("keypress", (event) => f.onKeyPress(event) );
+    document.getElementById("undo").addEventListener("click", (event) => f.deleteLast())
     let count = 0;
     while(true){
         await sleep(20);
