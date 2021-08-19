@@ -64,7 +64,6 @@ class Field {
     onMouseMove(event)
     {
         const rect = this.canvas.getBoundingClientRect();
-        console.log(rect);
         this.mousePos.x = event.clientX-rect.left;
         this.mousePos.y = event.clientY-rect.top;
     }
