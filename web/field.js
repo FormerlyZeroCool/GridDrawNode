@@ -70,6 +70,18 @@ class Field {
             ctx.fillStyle = fs;
     
         }
+        else{
+
+            const strokeStyle = ctx.strokeStyle;
+            ctx.strokeStyle = "#00F000";
+            ctx.beginPath();
+            ctx.moveTo(scale* (dim/gridDim*last[2])+offset, scale*(dim/gridDim*last[3])+offset);
+            ctx.lineTo(scale* (dim/gridDim*last[2])+offset - 5, scale*(dim/gridDim*last[3])+offset - 5);
+            ctx.moveTo(scale* (dim/gridDim*last[2])+offset, scale*(dim/gridDim*last[3])+offset);
+            ctx.lineTo(scale* (dim/gridDim*last[2])+offset + 5, scale*(dim/gridDim*last[3])+offset + 5);
+            ctx.stroke();
+            ctx.strokeStyle = strokeStyle;
+        }
         this.ctx.lineWidth = lineWidth;
     }
     onMouseMove(event)
