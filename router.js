@@ -55,7 +55,13 @@ function gen(app)
    app.get('/grid', (req,res,err) => {
         let response = `<html>
         <link rel="stylesheet" href="somecss.css">
-                <body><div id="screens">`;
+                <body>
+
+                <p>
+                <h4>This screen shows all active users drawing on the server.</h4><br>
+                As new users login or out it will automatically update the view of logged in user's work.
+                </p>
+                <div id="screens">`;
         for(let i = 0; i < loggedIn.length; i++)
         {
             const user = loggedIn[i];
