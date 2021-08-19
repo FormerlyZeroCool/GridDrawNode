@@ -112,7 +112,7 @@ class Field {
     }
     sync()
     {
-        if(!this.admin)
+        /*if(!this.admin)
         {
             const data = {id:this.canvas.getAttribute("name"),lines:this.lines};
             fetch("/data", {
@@ -122,6 +122,6 @@ class Field {
                 },
                 body: JSON.stringify(data)
               }).then(res => {console.log("Request complete! response:", data);});
-        }
+        }*/
     }
 };
