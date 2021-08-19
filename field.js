@@ -63,8 +63,9 @@ class Field {
     }
     onMouseMove(event)
     {
-        this.mousePos.x = event.clientX;
-        this.mousePos.y = event.clientY;
+        const rect = this.canvas.getBoundingClientRect();
+        this.mousePos.x = event.clientX-rect.left;
+        this.mousePos.y = event.clientY-rect.top;
     }
     onKeyPress(event)
     {
