@@ -10,9 +10,9 @@ async function getData()
 }
 async function main()
 {
-    const canvases = document.getElementsByTagName("canvas");
+    let canvases = document.getElementsByTagName("canvas");
     const gridDim = 4
-    fields = [];
+    let fields = [];
     for(let i = 0; i < canvases.length; i++)
     {
         let lines = [];
@@ -20,7 +20,7 @@ async function main()
         const dim = canvas.width;
         const ctx = canvas.getContext("2d");
         const f = new Field(lines, dim, 4, ctx, canvas, true);
-        fields.push(f);
+        fields.push([f,canvas.getAttribute("name")]);
     }
     console.log();
     //let f = Field(lines, canvas.width, gridDim, ctx);
@@ -29,15 +29,37 @@ async function main()
     while(true){
         await sleep(400);
         const data = await getData();
+        if(data.length != fields.length)
+        {
+            let doc = document.getElementById("screens");
+            doc.innerHTML = "";
+            for(let i = 0; i < data.length; i++)
+            {
+                doc.innerHTML += ` <div id="uname" name="${data[i].id}"> <p>${data[i].id}</p><canvas id="screen" name="${data[i].id}" width="250" height="250"
+                style="border:1px solid #c3c3c3;">
+                </canvas> </div>`;
+            }
+            fields = [];
+            canvases = document.getElementsByTagName("canvas");
+            for(let i = 0; i < data.length; i++)
+            {
+                const canvas = canvases[i];
+                const dim = canvas.width;
+                const ctx = canvas.getContext("2d");
+                const field = new Field(data.lines, dim, 4, ctx, canvas, true);
+                fields.push([field, canvas.getAttribute("name")]);
+            }
+        }
         for(let i = 0; i < fields.length; i++)
         {
             const f = fields[i];
-            const uname = f.canvas.getAttribute("name");
-            f.lines = data.find((element) => {console.log(element.id);return element.id === uname;}).lines;
-            f.ctx.fillStyle = "#FFFFFF";
-            f.ctx.fillRect(0,0,f.canvas.width,f.canvas.height);
-            f.ctx.fillStyle = "#FF0000";
-            f.draw()
+            const uname = f[1];
+            console.log(f[1]);
+            f[0].lines = data.find((element) => {return element.id === uname;}).lines;
+            f[0].ctx.fillStyle = "#FFFFFF";
+            f[0].ctx.fillRect(0,0,f[0].canvas.width,f[0].canvas.height);
+            f[0].ctx.fillStyle = "#FF0000";
+            f[0].draw()
         }
     }
 }
