@@ -63,8 +63,9 @@ class Field {
     }
     onMouseMove(event)
     {
-        this.mousePos.x = event.clientX;
-        this.mousePos.y = event.clientY;
+        const rect = this.canvas.getBoundingClientRect();
+        this.mousePos.x = event.clientX-rect.left;
+        this.mousePos.y = event.clientY-rect.top;
     }
     onKeyPress(event)
     {
@@ -89,8 +90,8 @@ class Field {
         const ctx = this.ctx;
         //console.log(gridDim);
         dim = canvas.width;
-        const x = event.clientX;
-        const y = event.clientY;
+        const x = this.mousePos.x;
+        const y = this.mousePos.y;
         let scale = (dim-offset/4)/dim;
         for(let i = 0; i < gridDim; i++)
         {

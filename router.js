@@ -24,8 +24,13 @@ function gen(app)
         style="border:1px solid #c3c3c3;">
         </canvas>` + `<div id='uname' hidden> ${req.body.uname} </div>`;
         
-        response +=     `<script src="field.js"></script>
+        response +=     `
+                <p>Click inside a circle to draw the next line<br>
+                Press 9 to undo<br>
+                Refresh to clear drawing</p>
+                    <script src="field.js"></script>
                         <script src="frontend.js"></script>
+                        
             </div>
             </body>
             
