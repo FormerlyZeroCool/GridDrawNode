@@ -104,7 +104,7 @@ class Field {
     }
     deleteLast()
     {
-        if(this.lines.length){
+        if(this.lines.length > 1){
             this.lines.pop();
             this.sync();
         }
