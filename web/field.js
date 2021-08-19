@@ -22,10 +22,13 @@ class Field {
         const gridDim = this.gridDim;
         const dim = this.dim
         const ctx = this.ctx;
-        let scale = (dim-offset/4)/dim;
+        const scale = (dim-offset/4)/dim;
+        const fs = ctx.fillStyle;
+        const fontSize = dim*.095;
+        ctx.font = `${fontSize}px serif`;
         for(let x = 0; x < gridDim; x++)
         {
-            let xpos = scale*(dim/gridDim*x)+offset;
+            let xpos = x*scale*(dim/gridDim)+offset;
             ctx.fillRect(xpos, offset, 3, (scale*dim)*((gridDim-1)/gridDim));
             ctx.fillRect(offset ,scale*(dim/gridDim*x)+offset, (scale*dim)*((gridDim-1)/gridDim), 3);
             for(let y = 0; y < gridDim; y++)
@@ -34,10 +37,10 @@ class Field {
                 ctx.arc(xpos, scale*(dim/gridDim*y)+offset, this.collisionRadius-2, 0, 2 * Math.PI);
                 ctx.stroke();
             }
-            const fontSize = dim*.095;
-            ctx.font = `${fontSize}px serif`;
+            ctx.fillStyle = "#000000";
             ctx.fillText(x+'', offset/4, xpos);
             ctx.fillText(x+'', xpos, offset/1.6);
+            ctx.fillStyle = fs;
         }
         const lineWidth = this.ctx.lineWidth;
         this.ctx.lineWidth = 5;
@@ -58,6 +61,14 @@ class Field {
             ctx.lineTo(this.mousePos.x, this.mousePos.y);
             ctx.stroke();
             ctx.strokeStyle = strokeStyle;
+            ctx.fillStyle = "#006077";
+            let mpx = this.mousePos.x;
+            if(mpx > dim - (dim/5*2))
+                mpx -= dim/3;
+            const str = `x: ${Math.floor(0.5+((this.mousePos.x-offset)*(gridDim/dim))/scale)}, y: ${Math.floor(0.5+((this.mousePos.y-offset)*(gridDim/dim))/scale)}`;
+            ctx.fillText(str,mpx, this.mousePos.y);
+            ctx.fillStyle = fs;
+    
         }
         this.ctx.lineWidth = lineWidth;
     }
@@ -88,7 +99,6 @@ class Field {
         const offset = this.offset
         const canvas = this.canvas;
         const ctx = this.ctx;
-        //console.log(gridDim);
         dim = canvas.width;
         const x = this.mousePos.x;
         const y = this.mousePos.y;
