@@ -109,7 +109,6 @@ class Field {
             {
                 const gx = scale*(dim/gridDim*j)+offset;
                 const gy = scale*(dim/gridDim*i)+offset;
-                //console.log(dist([gx,gy],[y,x]));
                 if(dist([gx,gy],[y,x]) < this.collisionRadius)
                 {
                     const last = this.lines[this.lines.length-1];
@@ -123,7 +122,7 @@ class Field {
     }
     sync()
     {
-        if(!this.admin)
+        /*if(!this.admin)
         {
             const data = {id:this.canvas.getAttribute("name"),lines:this.lines};
             fetch("/data", {
@@ -133,6 +132,6 @@ class Field {
                 },
                 body: JSON.stringify(data)
               }).then(res => {console.log("Request complete! response:", data);});
-        }
+        }*/
     }
 };
