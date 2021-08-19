@@ -22,7 +22,7 @@ async function main()
     document.getElementById("undo").addEventListener("click", (event) => f.deleteLast());
     let count = 0;
     while(true){
-        await sleep(20);
+        await sleep(50);
         count++;
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect(0,0,canvas.width,canvas.height)
