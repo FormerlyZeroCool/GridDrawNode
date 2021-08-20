@@ -15,7 +15,7 @@ function gen(app)
         res.redirect('/grid');
     let existingUser = loggedIn.find(el => el.id == req.body.uname);
     if(!existingUser)
-        loggedIn.push({id:req.body.uname, mousPos:{x:0,y:0}, lines:[]});
+        loggedIn.push({id:req.body.uname, mousePos:{x:0,y:0}, lines:[]});
     else
         existingUser.lines = [];
     let response = `<html>
@@ -48,10 +48,11 @@ function gen(app)
     });
     app.post('/data', (req,res,err) => {
         const data = req.body;
+        console.log(data);
         const rec = loggedIn.find(el => el.id == data.id);
         if(rec){
             rec.lines = data.lines;
-            rec.mousPos = data.mousPos;
+            rec.mousePos = data.mousePos;
         }
 
         res.send();
