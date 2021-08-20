@@ -137,7 +137,6 @@ class Field {
                 }
             }
         }
-        this.sync();
     }
     transformCoordinate(n)
     {
