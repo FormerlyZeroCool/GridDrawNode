@@ -47,6 +47,7 @@ async function main()
                 const dim = canvas.width;
                 const ctx = canvas.getContext("2d");
                 const field = new Field(data.lines, dim, 4, ctx, canvas, true);
+                field.mousePos = data.mousePos;
                 fields.push([field, canvas.getAttribute("name")]);
             }
         }
@@ -54,8 +55,13 @@ async function main()
         {
             const f = fields[i];
             const uname = f[1];
-            console.log(f[1]);
-            f[0].lines = data.find((element) => {return element.id === uname;}).lines;
+            let remoteRec = data.find((element) => {return element.id === uname;});
+            console.log(remoteRec);
+            const gx = f[0].transformCoordinate(remoteRec.mousePos.x);
+            const gy = f[0].transformCoordinate(remoteRec.mousePos.y);
+            f[0].mousePos = {x:gx, y:gy};
+            f[0].lines = remoteRec.lines;
+            console.log(remoteRec)
             f[0].ctx.fillStyle = "#FFFFFF";
             f[0].ctx.fillRect(0,0,f[0].canvas.width,f[0].canvas.height);
             f[0].ctx.fillStyle = "#FF0000";

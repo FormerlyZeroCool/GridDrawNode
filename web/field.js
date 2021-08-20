@@ -15,6 +15,7 @@ class Field {
         this.offset = dim*0.15;
         this.collisionRadius = this.offset/3;
         this.mousePos = {x: this.offset, y: this.offset};
+        this.drawCount = 0;
     }
     draw()
     {
@@ -47,17 +48,16 @@ class Field {
         for(let x = 0; x < this.lines.length; x++){
             let line = this.lines[x];
             ctx.beginPath();
-            ctx.moveTo(scale* (dim/gridDim*line[0])+offset, scale*(dim/gridDim*line[1])+offset);
-            ctx.lineTo(scale* (dim/gridDim*line[2])+offset, scale*(dim/gridDim*line[3])+offset);
+            ctx.moveTo(this.transformCoordinate(line[0]), this.transformCoordinate(line[1]));
+            ctx.lineTo(this.transformCoordinate(line[2]), this.transformCoordinate(line[3]));
             ctx.stroke();
         }
         const last = this.lines[this.lines.length-1];
-        if(!this.admin)
-        {
+        if(last){
             const strokeStyle = ctx.strokeStyle;
             ctx.strokeStyle = "#808080";
             ctx.beginPath();
-            ctx.moveTo(scale* (dim/gridDim*last[2])+offset, scale*(dim/gridDim*last[3])+offset);
+            ctx.moveTo(this.transformCoordinate(last[2]), this.transformCoordinate(last[3]));
             ctx.lineTo(this.mousePos.x, this.mousePos.y);
             ctx.stroke();
             ctx.strokeStyle = strokeStyle;
@@ -68,31 +68,33 @@ class Field {
             const str = `x: ${Math.floor(0.5+((this.mousePos.x-offset)*(gridDim/dim))/scale)}, y: ${Math.floor(0.5+((this.mousePos.y-offset)*(gridDim/dim))/scale)}`;
             ctx.fillText(str,mpx, this.mousePos.y);
             ctx.fillStyle = fs;
-    
         }
-        else{
-
-            const last = this.lines[this.lines.length-1];
+        
+        if(this.admin){
             if(last)
             {
-                const strokeStyle = ctx.strokeStyle;
-                ctx.strokeStyle = "#00F000";
+                const fillStyle = ctx.fillStyle;
+                ctx.fillStyle = "#00F000";
                 ctx.beginPath();
                 ctx.moveTo(scale* (dim/gridDim*last[2])+offset, scale*(dim/gridDim*last[3])+offset);
                 ctx.lineTo(scale* (dim/gridDim*last[2])+offset - 5, scale*(dim/gridDim*last[3])+offset - 5);
                 ctx.moveTo(scale* (dim/gridDim*last[2])+offset, scale*(dim/gridDim*last[3])+offset);
                 ctx.lineTo(scale* (dim/gridDim*last[2])+offset + 5, scale*(dim/gridDim*last[3])+offset + 5);
                 ctx.stroke();
-                ctx.strokeStyle = strokeStyle;
+                ctx.fillStyle = fillStyle;
             }
         }
+        if(this.drawCount++ % 10 == 0)
+            this.sync();
         this.ctx.lineWidth = lineWidth;
     }
     onMouseMove(event)
     {
+        if(!this.admin){
         const rect = this.canvas.getBoundingClientRect();
         this.mousePos.x = event.clientX-rect.left;
         this.mousePos.y = event.clientY-rect.top;
+        }
     }
     onKeyPress(event)
     {
@@ -135,13 +137,26 @@ class Field {
                 }
             }
         }
-        this.sync()
+        this.sync();
+    }
+    transformCoordinate(n)
+    {
+        const scale = (this.dim-this.offset/4)/this.dim;
+        return n*scale*(this.dim/this.gridDim)+this.offset;
     }
     sync()
     {
         if(!this.admin)
         {
-            const data = {id:this.canvas.getAttribute("name"),lines:this.lines};
+            const offset = this.offset
+            const gridDim = this.gridDim;
+            const dim = this.dim;
+            const scale = (dim-offset/4)/dim;
+            const gx = ((this.mousePos.x-offset)*(gridDim/dim))/scale;
+            const gy = ((this.mousePos.y-offset)*(gridDim/dim))/scale;
+            console.log(gx,gy)
+            const data = {id:this.canvas.getAttribute("name"),mousePos:{x:gx,y:gy},lines:this.lines};
+
             fetch("/data", {
                 method: "POST", 
                 headers: {
